@@ -3,7 +3,7 @@
 # Project Name: Movie Collection React.js App
 
 ## About: 
-This project is built using React.js. I did this project to fetch the API and use the results for CRUD operations. CRUD stands for Create, Read, Update, and Delete operation. I have considered two actors for my website. The first actor is the Admin and the second actor is the customers. This project is only functional when the backend is running. I have built a web API using .Net core on the backend.
+This project is built using React.js. I did this project to fetch the API and use the results for CRUD operations. CRUD stands for Create, Read, Update, and Delete operation. I have considered two actors for my website. The first actor is the Admin and the second actor is the customers. This project is only functional when the backend is running. I have built a web API using .NET Core on the backend.
 
 ## Required Software to run the app:
 1) Visual Studio Code to run the react app
