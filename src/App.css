@@ -1,0 +1,545 @@
+html {
+  box-sizing: border-box;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+.App {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+/*Navbar Starting*/
+.movie-nav-background {
+  background-color: black;
+}
+
+.movie-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+  color: lightgrey;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.movie-logo {
+  width: 70px;
+  border-radius: 50%;
+}
+
+.movie-nav ul {
+  display: flex;
+}
+
+.movie-nav ul li {
+  margin-left: 20px;
+  list-style: none;
+  font-size: 1.15rem;
+  cursor: pointer;
+}
+
+.movie-nav ul li a {
+  text-decoration: none;
+  color: lightgrey;
+}
+
+.movie-nav h1 a {
+  text-decoration: none;
+  color: lightgrey;
+}
+
+.movie-nav ul li:hover {
+  text-decoration: underline;
+}
+
+/*Navbar Ending*/
+
+.movie-login-background {
+  background-color: cornsilk;
+  background-position: center;
+  height: calc(100vh - 166.875px);
+  display: flex;
+  flex-wrap: wrap;
+  flex: 1;
+}
+
+.movie-login-background h1 {
+  color: lightcoral;
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.movie-login {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  width: 100%;
+  align-items: center;
+}
+
+.movie-login-form {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  padding: 40px 20px;
+  border: 2px solid black;
+  align-items: center;
+  color: lightgray;
+  background-color: lightcoral;
+  border-radius: 20px;
+}
+
+.movie-login-form input {
+  border: 1px solid black;
+  padding: 10px;
+}
+
+.movie-login-form label {
+  text-align: left;
+}
+
+.movie-login-form * {
+  width: 60%;
+  margin-bottom: 5px;
+}
+
+.movie-login-form label:after {
+  content: "*";
+  color: red;
+  font-weight: bold;
+}
+
+.movie-login-form button {
+  margin-top: 20px;
+  padding: 5px;
+}
+
+.login-error {
+  background-color: #ffb09c;
+  margin-top: 10px;
+  color: red;
+  width: 50%;
+  padding: 10px;
+  border-radius: 20px;
+}
+
+.login-error h3 {
+  text-decoration: underline;
+}
+
+.login-error p {
+  font-weight: bold;
+}
+
+.login-validation {
+  margin: 0;
+  text-align: left;
+  color: red;
+  background-color: black;
+  padding: 5px;
+}
+
+.server-validation {
+  background-color: black;
+  padding: 10px 25px;
+}
+
+.server-validation h3 {
+  margin-top: 0;
+  color: red;
+  text-decoration: underline;
+}
+
+.server-validation p {
+  color: red;
+  font-size: 1.05rem;
+}
+
+/*Footer start*/
+
+.movie-footer {
+  padding: 20px 20px;
+  color: lightgrey;
+  background-color: black;
+}
+
+/*Signup form*/
+.signup {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 50px;
+  margin-bottom: 50px;
+  justify-content: center;
+
+}
+
+.signup h1 {
+  margin-top: 10px;
+}
+
+.signup-form {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  background-color: lightcoral;
+  width: 50%;
+  padding: 40px 40px;
+  border-radius: 20px;
+
+}
+
+.signup-form label {
+  flex-basis: 20%;
+  text-align: right;
+  color: lightgray;
+  font-weight: bold;
+}
+
+.signup-form input {
+  flex-basis: 76%;
+  padding: 10px;
+}
+
+.signup-form * {
+  margin-bottom: 10px;
+}
+
+.signup-form label:after {
+  content: "*";
+  color: red;
+  font-weight: bold;
+}
+
+.signup-form button {
+  flex-basis: 76%;
+  padding: 10px;
+  margin-left: 24%;
+}
+
+.signup-validation {
+  margin-left: 24%;
+  flex-basis: 76%;
+  margin-top: 0;
+  text-align: left;
+  background-color: black;
+  color: red;
+  padding: 5px;
+}
+
+.profile {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 50px;
+  margin-bottom: 50px;
+  justify-content: center;
+}
+
+.profile h1 {
+  margin-top: 5px;
+}
+
+.profile-form {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  width: 100%;
+  align-items: center;
+}
+
+.profile-form-container {
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  background-color: lightcoral;
+  align-items: center;
+  padding: 40px;
+  border: 2px solid black;
+  border-radius: 20px;
+}
+
+.profile-form-sub-container {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+
+}
+
+.profile-one,
+.profile-two {
+  flex-basis: calc((100% - 2%)/2);
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-one label,
+.profile-two label {
+  text-align: right;
+  color: lightgray;
+  font-weight: bold;
+  text-align: left;
+}
+
+.profile-one input,
+.profile-two input {
+  padding: 5px;
+}
+
+.profile-one *,
+.profile-two * {
+  margin-bottom: 10px;
+}
+
+.profile-form button {
+  width: 40%;
+  margin-top: 10px;
+  padding: 5px;
+}
+
+.profile-validation {
+  margin-top: 0;
+  text-align: left;
+  background-color: black;
+  color: red;
+  padding: 5px;
+}
+
+.movie-dashboard {
+  width: 100%;
+}
+
+.movie-details {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.individual {
+  flex-basis: calc((100% - 2%)/3);
+  background-color: coral;
+  display: flex;
+  margin-top: 1rem;
+}
+
+.individual .movie-name {
+  flex-basis: 40%;
+  background-color: blue;
+  display: flex;
+  align-items: center;
+}
+
+.individual .movie-name p {
+  width: 100%;
+}
+
+.individual .movie-spec {
+  flex-basis: 60%;
+}
+
+.individual .movie-spec button {
+  margin-bottom: 1rem;
+}
+
+.watch-selected {
+  width: 60%;
+  background-color: coral;
+  margin: 2rem auto;
+  padding: 1rem;
+}
+
+.admin-dashboard {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.movie-table {
+  width: 100%;
+  align-self: center;
+  display: flex;
+  justify-content: center;
+}
+
+table {
+  border-collapse: collapse;
+  border: 1px solid lightgrey;
+  color: lightgray;
+  font-size: 1.5rem;
+  width: 80%;
+}
+
+table thead tr {
+  background-color: black;
+  color: lightgray;
+}
+
+table th,
+table td {
+  padding: 1rem;
+}
+
+table tbody tr {
+  border-bottom: 2px solid black;
+  background-color: coral;
+  color: black;
+}
+
+table tbody tr:nth-of-type(2n) {
+  background-color: green;
+}
+
+.new-movie-button {
+  width: 25%;
+  align-self: center;
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background-color: green;
+  color: black;
+  font-size: 1.15rem;
+  font-weight: bold;
+  cursor: pointer;
+  border: 2px solid coral;
+  border-radius: 15px;
+}
+
+.admin-dashboard a {
+  text-decoration: none;
+}
+
+.manage-section {
+  display: flex;
+  width: 75%;
+  justify-content: space-between;
+  align-self: center;
+  margin-top: 50px;
+}
+
+.manage-users,
+.manage-movies {
+  flex-basis: calc((100 - 2%)/2);
+}
+
+.manage-section a {
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.admin-add-movie,
+.admin-manage-movies,
+.admin-add-user,
+.admin-manage-users {
+  background-color: coral;
+  padding: 60px;
+  border: 4px solid black;
+}
+
+.admin-manage-movies {
+  margin-top: 20px;
+  padding: 100px;
+}
+
+.admin-manage-users {
+  margin-top: 20px;
+  padding: 100px;
+}
+
+.movie {
+  width: 100%;
+}
+
+.movie h1 {
+  margin: 4rem;
+}
+
+.movie-form {
+  width: 40%;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: coral;
+  font-weight: bold;
+}
+
+.movie-form form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.movie-form form label {
+  color: lightgray;
+  text-align: left;
+}
+
+.movie-form form input {
+  margin: 4px 0px 10px 0px;
+  padding: 5px;
+}
+
+.movie-form form button {
+  margin-top: 16px;
+}
+
+.update-success {
+  font-style: italic;
+  font-size: 1.5rem;
+  background-color: coral;
+  color: green;
+  padding: 1rem;
+  font-weight: bolder;
+  width: 60%;
+  align-self: center;
+  margin: 1.5rem auto;
+}
+
+
+/*Footer Ending*/
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
