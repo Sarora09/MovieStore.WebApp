@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 const UpdateUser = () => {
 
@@ -11,11 +11,9 @@ const UpdateUser = () => {
     const [age, setAge] = useState(18);
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
-    const [addResult, setAddResult] = useState("");
     const [buttonStatus, setButtonStatus] = useState("Update Profile");
     const [updateResult, setUpdateResult] = useState("");
     const params = useParams();
-    const navigate = useNavigate();
 
     // States for input field validations
     const [firstNameErr, setFirstNameErr] = useState("");
@@ -36,7 +34,6 @@ const UpdateUser = () => {
             }
         });
         var user = await userResult.json();
-        // console.log(user);
         if (user) {
             setFirstName(user.firstName);
             setLastName(user.lastName);
@@ -68,25 +65,62 @@ const UpdateUser = () => {
     const submitUser = async (e) => {
 
         e.preventDefault();
-        var id = params.id;
-        var token = localStorage.getItem('token');
-        var movieResult = await fetch(`https://movie-collection-api-app.azurewebsites.net/api/access/${id}`, {
-            method: "put",
-            body: JSON.stringify({ firstName, lastName, email, creditCard, age, password, confirmPassword }),
-            headers: {
-                authorization: `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            }
-        });
+        if (firstName && lastName && email && creditCard && age && password && confirmPassword) {
+            var id = params.id;
+            var token = localStorage.getItem('token');
+            var putResult = await fetch(`https://movie-collection-api-app.azurewebsites.net/api/access/${id}`, {
+                method: "put",
+                body: JSON.stringify({ firstName, lastName, email, creditCard, age, password, confirmPassword }),
+                headers: {
+                    authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
 
-        if (movieResult.status == 200) {
-            setUpdateResult("Movie record updated");
+            if (putResult.status == 200) {
+                setUpdateResult("User record updated");
+            }
+            else if (putResult.status == 500) {
+                // 500 when the server side code fails to work with the user response such as password requirement rules of .Net Core
+                setUpdateResult("");
+                setConfirmPasswordErr("");
+                setCreditCardErr("");
+                setFirstNameErr("");
+                setAgeErr("");
+                setLastNameErr("");
+                setPasswordErr("");
+
+                var receivedErrorResponse = await putResult.json();
+
+                var errorList = receivedErrorResponse.map((element) => {
+                    return element.description;
+                });
+                setServerErr(errorList);
+            }
+            else if (putResult.status == 400) {
+                // 400 error when the user response doesn't fails the validation set on the server side such as password and confirmPassword doesn't match on the server side validations
+                setUpdateResult("");
+                var receivedErrorResponse = await putResult.json();
+                var receivedError = receivedErrorResponse.errors;
+                setServerErr("");
+                // var receivedError = JSON.parse(decodedValue).errors;
+                receivedError.ConfirmPassword ? setConfirmPasswordErr('Confirm Password is required and shall match with Password field.') : setConfirmPasswordErr("");
+                receivedError.CreditCard ? setCreditCardErr("Credit Card is required") : setCreditCardErr("");
+                receivedError.FirstName ? setFirstNameErr("First Name is required") : setFirstNameErr("");
+                receivedError.age ? setAgeErr("Age is required") : setAgeErr("");
+                receivedError.LastName ? setLastNameErr("Last name is required") : setLastNameErr("");
+                receivedError.Password ? setPasswordErr("Password is required for any profile update and shall match with ConfirmPassword field.") : setPasswordErr("");
+            }
         }
         else {
-            if (movieResult.status == 400) {
-                var errorObject = await movieResult.json();
-                // console.log(errorObject);
-            }
+            setUpdateResult("");
+            setServerErr("");
+            confirmPassword == "" ? setConfirmPasswordErr('Confirm Password is required and shall match with Password field.') : setConfirmPasswordErr("");
+            creditCard == "" ? setCreditCardErr("Credit Card is required") : setCreditCardErr("");
+            firstName == "" ? setFirstNameErr("First Name is required") : setFirstNameErr("");
+            age == 0 ? setAgeErr("Age is required") : setAgeErr("");
+            lastName == "" ? setLastNameErr("Last name is required") : setLastNameErr("");
+            password == "" ? setPasswordErr("Password is required for any profile update and shall match with ConfirmPassword field.") : setPasswordErr("");
         }
     }
 
