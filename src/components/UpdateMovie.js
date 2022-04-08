@@ -18,13 +18,13 @@ const UpdateMovie = () => {
         var movieId = params.id;
         var i = 0;
         var token = localStorage.getItem('token');
-        var movieResult = await fetch(`https://localhost:44304/api/movies/${movieId}`, {
+        var movieResult = await fetch(`https://movie-collection-api-app.azurewebsites.net/api/movies/${movieId}`, {
             headers: {
                 authorization: `Bearer ${token}`
             }
         });
         var movie = await movieResult.json();
-        console.log(movie);
+        // console.log(movie);
         if (movie) {
             setMovieName(movie.name);
             setRating(movie.rating);
@@ -53,7 +53,7 @@ const UpdateMovie = () => {
         e.preventDefault();
         var id = params.id;
         var token = localStorage.getItem('token');
-        var movieResult = await fetch(`https://localhost:44304/api/movies/${id}`, {
+        var movieResult = await fetch(`https://movie-collection-api-app.azurewebsites.net/api/movies/${id}`, {
             method: "put",
             body: JSON.stringify({ id, name, rating, genre, rentPrice }),
             headers: {
@@ -61,14 +61,14 @@ const UpdateMovie = () => {
                 'Content-Type': 'application/json'
             }
         });
-        console.log(movieResult, movieResult.status);
+        // console.log(movieResult, movieResult.status);
         if (movieResult.status == 200) {
             setUpdateResult("Movie record updated");
         }
         else {
             if (movieResult.status == 400) {
                 var errorObject = await movieResult.json();
-                console.log(errorObject);
+                // console.log(errorObject);
                 if (errorObject.errors.Name) {
                     setMovieNameErr("Movie Name is required.");
                 }
@@ -97,7 +97,7 @@ const UpdateMovie = () => {
                         {movieNameErr && <p className="profile-validation">{movieNameErr}</p>}
 
                         <label>Rating</label>
-                        <input type="number" min="0" max="10" step="any" placeholder="First name" value={rating} onChange={(e) => setRating(e.target.value)} />
+                        <input type="number" min="0" max="10" step="any" placeholder="Rating" value={rating} onChange={(e) => setRating(e.target.value)} />
                         {ratingErr && <p className="profile-validation">{ratingErr}</p>}
 
                         <label>Genre</label>

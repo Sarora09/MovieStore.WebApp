@@ -28,8 +28,8 @@ const Profile = () => {
   useEffect(async () => {
     let userId = localStorage.getItem('userId');
     var userEmail = localStorage.getItem('email');
-    if (userId) {
-      var result = await fetch(`https://localhost:44304/api/access/${userId}`);
+    if (userId != "") {
+      var result = await fetch(`https://movie-collection-api-app.azurewebsites.net/api/access/${userId}`);
       var userDetails = await result.json();
       userDetails.firstName !== null ? setFirstName(userDetails.firstName) : setFirstName("");
       userDetails.lastName != null ? setLastName(userDetails.lastName) : setLastName("");
@@ -47,7 +47,7 @@ const Profile = () => {
   const updateData = async (e) => {
     e.preventDefault();
     let newUserId = localStorage.getItem('userId');
-    var result = await fetch(`https://localhost:44304/api/access/${newUserId}`,
+    var result = await fetch(`https://movie-collection-api-app.azurewebsites.net/api/access/${newUserId}`,
       {
         method: 'put',
         body: JSON.stringify({ firstName, lastName, email, creditCard, age, password, confirmPassword }),
@@ -64,7 +64,7 @@ const Profile = () => {
 
     if (result.status == 200) {
       navigate('/moviedashboard', { state: { 'email': email } })
-      console.log("this");
+      // console.log("this");
     }
     else {
       if (result.status == 500) {
@@ -87,7 +87,7 @@ const Profile = () => {
           setServerErr("");
           var receivedError = JSON.parse(decodedValue).errors;
           // console.log(decodedValue);
-          console.log(receivedError);
+          // console.log(receivedError);
           receivedError.ConfirmPassword ? setConfirmPasswordErr('Confirm Password is required and shall match with Password field.') : setConfirmPasswordErr("");
           receivedError.CreditCard ? setCreditCardErr("Credit Card is required") : setCreditCardErr("");
           receivedError.FirstName ? setFirstNameErr("First Name is required") : setFirstNameErr("");

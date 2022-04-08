@@ -38,7 +38,7 @@ const Signup = () => {
   // Without the JWT key, the backend (.Net) will not allow the user to access the movie resource
   const login = async () => {
     // server returns response with code and body containing the login jwt string
-    var result = await fetch("https://localhost:44304/api/access/login", {
+    var result = await fetch("https://movie-collection-api-app.azurewebsites.net/api/access/login", {
       method: 'post',
       body: JSON.stringify({ email, password }),
       headers: {
@@ -64,7 +64,7 @@ const Signup = () => {
     e.preventDefault();
     validation();
     if (emailErr == "" && passwordErr == "" && confirmPasswordErr == "") {
-      var result = await fetch("https://localhost:44304/api/access/signup", {
+      var result = await fetch("https://movie-collection-api-app.azurewebsites.net/api/access", {
         method: 'post',
         body: JSON.stringify({ email, password, confirmPassword }),
         headers: {

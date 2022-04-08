@@ -6,9 +6,9 @@ const MovieDashboard = () => {
     const [movieDetails, setMovieDetails] = useState("");
     const [testLink, setTestLink] = useState("");
 
-    useEffect(async ()=>{
-        var result = await fetch(`https://localhost:44304/api/movies`, {
-            headers:{
+    useEffect(async () => {
+        var result = await fetch(`https://movie-collection-api-app.azurewebsites.net/api/movies`, {
+            headers: {
                 authorization: `Bearer ${token}`
             }
         });
@@ -16,39 +16,38 @@ const MovieDashboard = () => {
         setMovieDetails(userDetails);
     }, []);
 
-    console.log(movieDetails);
+    // console.log(movieDetails);
 
     const selectMovie = (id, rentPrice) => {
-        console.log(id, rentPrice);
-        var newMovieDetails = movieDetails.filter((element)=>element.id !=id);
+        // console.log(id, rentPrice);
+        var newMovieDetails = movieDetails.filter((element) => element.id != id);
         setMovieDetails(newMovieDetails);
         setTestLink(`https://www.testlink.com/watch?id=${id}`);
     }
 
-    return(
+    return (
         <div className='movie-login-background'>
             <div className="movie-dashboard container">
                 {testLink && <p className='watch-selected'><b>Watch selected movie at: </b>
-                <a href={testLink} target="_blank">{testLink}</a></p>}
+                    <a href={testLink} target="_blank">{testLink}</a></p>}
                 <h1>My Dashboard</h1>
                 {
                     movieDetails && <div className="movie-details">
                         {
-                            movieDetails.map((element, index)=>{
+                            movieDetails.map((element, index) => {
                                 return <div key={index} className="individual">
                                     <div className="movie-name">
                                         <p><b>{element.name}</b></p>
                                     </div>
                                     <div className="movie-spec">
-                                    <p><b>Rating:</b> {element.rating}</p>
-                                    <p><b>Genre:</b> {element.genre}</p>
-                                    <p><b>Price:</b> {element.rentPrice}$</p>
-                                    <button onClick={()=>{
-                                        if(window.confirm(`You have selected to watch ${element.name} for ${element.rentPrice}$. Press 'OK' to accept the charges.`)) 
-                                        {
-                                            selectMovie(element.id, element.rentPrice);
-                                        }
-                                    }}>Watch</button>
+                                        <p><b>Rating:</b> {element.rating}</p>
+                                        <p><b>Genre:</b> {element.genre}</p>
+                                        <p><b>Price:</b> {element.rentPrice}$</p>
+                                        <button onClick={() => {
+                                            if (window.confirm(`You have selected to watch ${element.name} for ${element.rentPrice}$. Press 'OK' to accept the charges.`)) {
+                                                selectMovie(element.id, element.rentPrice);
+                                            }
+                                        }}>Watch</button>
                                     </div>
                                 </div>
                             })

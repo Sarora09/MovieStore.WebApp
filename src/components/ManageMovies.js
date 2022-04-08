@@ -9,14 +9,14 @@ const ManageMovies = () => {
     const location = useLocation();
 
     const fetchMovies = async () => {
-        const movieResult = await fetch('https://localhost:44304/api/movies', {
+        const movieResult = await fetch('https://movie-collection-api-app.azurewebsites.net/api/movies', {
             headers: {
                 authorization: `Bearer ${token}`
             }
         });
         // extracting json list
         var movieListResults = await movieResult.json();
-        console.log(movieListResults);
+        // console.log(movieListResults);
         setMovieList(movieListResults);
     }
 
@@ -25,8 +25,8 @@ const ManageMovies = () => {
     }, []);
 
     const deleteMovie = async (id) => {
-        console.log(id);
-        var movieResult = await fetch(`https://localhost:44304/api/movies/${id}`, {
+        // console.log(id);
+        var movieResult = await fetch(`https://movie-collection-api-app.azurewebsites.net/api/movies/${id}`, {
             method: "delete",
             headers: {
                 authorization: `Bearer ${token}`
@@ -58,7 +58,7 @@ const ManageMovies = () => {
                         </thead>
                         <tbody>
                             {movieList ? movieList.map((element, index) => {
-                                console.log(element);
+                                // console.log(element);
                                 return <tr key={index + 1}>
                                     <td>{index + 1}</td>
                                     <td>{element.name}</td>

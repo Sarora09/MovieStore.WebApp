@@ -13,8 +13,8 @@ const Login = () => {
   // Implemented using the localstorage. The token value is saved in localstorage when user logged in.
   useEffect(() => {
     let storageToken = localStorage.getItem('token');
-    if (storageToken) {
-      navigate('/profile')
+    if (storageToken != null) {
+      return navigate('/profile');
     }
   }, []);
 
@@ -30,7 +30,7 @@ const Login = () => {
     if (email !== "" && password !== "") {
 
       // server returns response with code and body containing the login jwt string
-      var result = await fetch("https://localhost:44304/api/access/login", {
+      var result = await fetch("https://movie-collection-api-app.azurewebsites.net/api/access/login", {
         method: 'post',
         body: JSON.stringify({ email, password }),
         headers: {
@@ -57,7 +57,7 @@ const Login = () => {
           localStorage.setItem('token', decodedValue);
 
           // I am sending the email and fetching the user id only so it will return me the id
-          var loginUserResult = await fetch(`https://localhost:44304/api/access/email/${email}`);
+          var loginUserResult = await fetch(`https://movie-collection-api-app.azurewebsites.net/api/access/email/${email}`);
 
           // because I am getting the id only I am not using .json but only the bodyreader
           var defaultEncodedIdValue = await loginUserResult.body.getReader().read();
@@ -66,7 +66,7 @@ const Login = () => {
           var decodedIdValue = new TextDecoder().decode(defaultEncodedIdValue.value);
           localStorage.setItem('userId', decodedIdValue);
 
-          console.log(decodedIdValue);
+          // console.log(decodedIdValue);
 
           navigate('/profile');
 

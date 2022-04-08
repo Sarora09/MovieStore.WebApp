@@ -30,13 +30,13 @@ const UpdateUser = () => {
     useEffect(async () => {
         var userId = params.id;
         var token = localStorage.getItem('token');
-        var userResult = await fetch(`https://localhost:44304/api/access/${userId}`, {
+        var userResult = await fetch(`https://movie-collection-api-app.azurewebsites.net/api/access/${userId}`, {
             headers: {
                 authorization: `Bearer ${token}`
             }
         });
         var user = await userResult.json();
-        console.log(user);
+        // console.log(user);
         if (user) {
             setFirstName(user.firstName);
             setLastName(user.lastName);
@@ -70,7 +70,7 @@ const UpdateUser = () => {
         e.preventDefault();
         var id = params.id;
         var token = localStorage.getItem('token');
-        var movieResult = await fetch(`https://localhost:44304/api/access/${id}`, {
+        var movieResult = await fetch(`https://movie-collection-api-app.azurewebsites.net/api/access/${id}`, {
             method: "put",
             body: JSON.stringify({ firstName, lastName, email, creditCard, age, password, confirmPassword }),
             headers: {
@@ -85,7 +85,7 @@ const UpdateUser = () => {
         else {
             if (movieResult.status == 400) {
                 var errorObject = await movieResult.json();
-                console.log(errorObject);
+                // console.log(errorObject);
             }
         }
     }
@@ -108,19 +108,19 @@ const UpdateUser = () => {
                         <div className="profile-form-sub-container">
                             <div className="profile-one">
                                 <label>First Name</label>
-                                <input type="text" placeholder="first name" value={firstName} onChange={(e) => setFirstName(e.target.value)} />
+                                <input type="text" placeholder="First name" value={firstName} onChange={(e) => setFirstName(e.target.value)} />
                                 {firstNameErr && <p className="profile-validation">{firstNameErr}</p>}
 
                                 <label>LastName</label>
-                                <input type="text" placeholder="last name" value={lastName} onChange={(e) => setLastName(e.target.value)} />
+                                <input type="text" placeholder="Last name" value={lastName} onChange={(e) => setLastName(e.target.value)} />
                                 {lastNameErr && <p className="profile-validation">{lastNameErr}</p>}
 
                                 <label>Email</label>
-                                <input type="email" placeholder="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                                <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
                                 {emailErr && <p className="profile-validation">{emailErr}</p>}
 
                                 <label>Credit Card</label>
-                                <input type="text" placeholder="credit card" value={creditCard} onChange={(e) => setCreditCard(e.target.value)} />
+                                <input type="text" placeholder="Credit card" value={creditCard} onChange={(e) => setCreditCard(e.target.value)} />
                                 {creditCardErr && <p className="profile-validation">{creditCardErr}</p>}
                             </div>
 

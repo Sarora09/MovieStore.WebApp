@@ -16,7 +16,7 @@ const AddMovie = () => {
     const submitMovie = async (e) => {
         e.preventDefault();
         let token = localStorage.getItem('token');
-        var postResult = await fetch(`https://localhost:44304/api/movies`,
+        var postResult = await fetch(`https://movie-collection-api-app.azurewebsites.net/api/movies`,
             {
                 method: 'post',
                 body: JSON.stringify({ name, rating, genre, rentPrice }),
@@ -25,9 +25,9 @@ const AddMovie = () => {
                     'Content-Type': 'application/json',
                 }
             });
-        console.log(postResult.status);
-        console.log(await postResult.json());
-        if (postResult.status == 200) {
+        // console.log(postResult.status);
+        // console.log(await postResult.json());
+        if (postResult.status == 201) {
             Navigate('/admindashboard/managemovies');
         }
     }
@@ -43,7 +43,7 @@ const AddMovie = () => {
                         {movieNameErr && <p className="profile-validation">{movieNameErr}</p>}
 
                         <label>Rating</label>
-                        <input type="number" min="0" max="10" step="any" placeholder="First name" value={rating} onChange={(e) => setRating(e.target.value)} />
+                        <input type="number" min="0" max="10" step="any" placeholder="Rating" value={rating} onChange={(e) => setRating(e.target.value)} />
                         {ratingErr && <p className="profile-validation">{ratingErr}</p>}
 
                         <label>Genre</label>

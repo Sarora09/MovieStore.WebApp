@@ -15,14 +15,14 @@ const ManageUsers = () => {
     const [deleteResult, setDeleteResult] = useState("");
 
     const fetchUsers = async () => {
-        const userResult = await fetch('https://localhost:44304/api/access', {
+        const userResult = await fetch('https://movie-collection-api-app.azurewebsites.net/api/access', {
             headers: {
                 authorization: `Bearer ${token}`
             }
         });
         // extracting json list
         var userListResults = await userResult.json();
-        console.log(userListResults);
+        // console.log(userListResults);
         setUserList(userListResults);
     }
 
@@ -31,8 +31,8 @@ const ManageUsers = () => {
     }, []);
 
     const deleteUser = async (id) => {
-        console.log(id);
-        var userResult = await fetch(`https://localhost:44304/api/access/${id}`, {
+        // console.log(id);
+        var userResult = await fetch(`https://movie-collection-api-app.azurewebsites.net/api/access/${id}`, {
             method: "delete",
             headers: {
                 authorization: `Bearer ${token}`
@@ -64,7 +64,7 @@ const ManageUsers = () => {
                         </thead>
                         <tbody>
                             {userList ? userList.map((element, index) => {
-                                console.log(element);
+                                // console.log(element);
                                 return <tr key={index + 1}>
                                     <td>{index + 1}</td>
                                     <td>{element.firstName} {element.lastName}</td>

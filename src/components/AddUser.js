@@ -26,7 +26,7 @@ const AddUser = () => {
   const submitUser = async (e) => {
     e.preventDefault();
     let token = localStorage.getItem('token');
-    var postResult = await fetch(`https://localhost:44304/api/access/signup`,
+    var postResult = await fetch(`https://movie-collection-api-app.azurewebsites.net/api/access`,
       {
         method: 'post',
         body: JSON.stringify({ firstName, lastName, email, creditCard, age, password, confirmPassword }),
@@ -66,19 +66,19 @@ const AddUser = () => {
             <div className="profile-form-sub-container">
               <div className="profile-one">
                 <label>First Name</label>
-                <input type="text" placeholder="first name" value={firstName} onChange={(e) => setFirstName(e.target.value)} />
+                <input type="text" placeholder="First name" value={firstName} onChange={(e) => setFirstName(e.target.value)} />
                 {firstNameErr && <p className="profile-validation">{firstNameErr}</p>}
 
                 <label>LastName</label>
-                <input type="text" placeholder="last name" value={lastName} onChange={(e) => setLastName(e.target.value)} />
+                <input type="text" placeholder="Last name" value={lastName} onChange={(e) => setLastName(e.target.value)} />
                 {lastNameErr && <p className="profile-validation">{lastNameErr}</p>}
 
                 <label>Email</label>
-                <input type="email" placeholder="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
                 {emailErr && <p className="profile-validation">{emailErr}</p>}
 
                 <label>Credit Card</label>
-                <input type="text" placeholder="credit card" value={creditCard} onChange={(e) => setCreditCard(e.target.value)} />
+                <input type="text" placeholder="Credit card" value={creditCard} onChange={(e) => setCreditCard(e.target.value)} />
                 {creditCardErr && <p className="profile-validation">{creditCardErr}</p>}
               </div>
 

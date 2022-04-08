@@ -71,16 +71,17 @@ html {
 /*Navbar Ending*/
 
 .movie-login-background {
-  background-color: cornsilk;
+  background-color: rgb(162, 142, 134);
   background-position: center;
   height: calc(100vh - 166.875px);
   display: flex;
   flex-wrap: wrap;
   flex: 1;
+  padding-bottom: 32px;
 }
 
 .movie-login-background h1 {
-  color: lightcoral;
+  color: black;
   font-weight: bold;
   text-decoration: underline;
 }
@@ -101,7 +102,7 @@ html {
   border: 2px solid black;
   align-items: center;
   color: lightgray;
-  background-color: lightcoral;
+  background-color: black;
   border-radius: 20px;
 }
 
@@ -199,7 +200,7 @@ html {
   flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
-  background-color: lightcoral;
+  background-color: black;
   width: 50%;
   padding: 40px 40px;
   border-radius: 20px;
@@ -501,7 +502,7 @@ table tbody tr:nth-of-type(2n) {
 .update-success {
   font-style: italic;
   font-size: 1.5rem;
-  background-color: coral;
+  background-color: black;
   color: green;
   padding: 1rem;
   font-weight: bolder;
