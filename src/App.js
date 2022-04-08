@@ -16,6 +16,7 @@ import UpdateMovie from "./components/UpdateMovie";
 import ManageUsers from "./components/ManageUsers";
 import AddUser from "./components/AddUser";
 import UpdateUser from "./components/UpdateUser";
+import PageNotFound from "./components/PageNotFound";
 
 function App() {
   return (
@@ -39,6 +40,7 @@ function App() {
           <Route path="/" element={<Login />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="*" element={<PageNotFound />} />
         </Routes>
       </BrowserRouter>
       <Footer />

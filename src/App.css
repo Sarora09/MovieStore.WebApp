@@ -80,6 +80,26 @@ html {
   padding-bottom: 32px;
 }
 
+.page-not-found {
+  background-color: rgb(162, 142, 134);
+  height: calc(100vh - 166.875px);
+  display: flex;
+  flex-wrap: wrap;
+  flex: 1;
+  padding-bottom: 32px;
+  justify-content: center;
+}
+
+.page-not-found-content {
+  font-size: xx-large;
+  font-weight: bold;
+  align-self: center;
+  border: 5px solid black;
+  padding: 40px;
+  color: black;
+  background-color: crimson;
+}
+
 .movie-login-background h1 {
   color: black;
   font-weight: bold;
