@@ -94,6 +94,7 @@ const Profile = () => {
       }
     }
     else {
+      setServerErr("");
       confirmPassword == "" ? setConfirmPasswordErr('Confirm Password is required and shall match with Password field.') : setConfirmPasswordErr("");
       creditCard == "" ? setCreditCardErr("Credit Card is required") : setCreditCardErr("");
       firstName == "" ? setFirstNameErr("First Name is required") : setFirstNameErr("");

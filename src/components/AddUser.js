@@ -25,28 +25,70 @@ const AddUser = () => {
 
   const submitUser = async (e) => {
     e.preventDefault();
-    let token = localStorage.getItem('token');
-    var postResult = await fetch(`https://movie-collection-api-app.azurewebsites.net/api/access`,
-      {
-        method: 'post',
-        body: JSON.stringify({ firstName, lastName, email, creditCard, age, password, confirmPassword }),
-        headers: {
-          authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        }
-      });
-    if (postResult.status == 200) {
-      setFirstName("");
-      setLastName("");
-      setEmail("");
-      setCreditCard("");
-      setAge("");
-      setPassword("");
-      setConfirmPassword("");
-      setAddResult("User added.");
+    if (firstName && lastName && email && creditCard && age && password && confirmPassword) {
+      let token = localStorage.getItem('token');
+      var postResult = await fetch(`https://movie-collection-api-app.azurewebsites.net/api/access`,
+        {
+          method: 'post',
+          body: JSON.stringify({ firstName, lastName, email, creditCard, age, password, confirmPassword }),
+          headers: {
+            authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          }
+        });
+      // extracting the readable stream from the response and using the getReader() read property. It returns a Unit8Array() value
+      var defaultEncodedValue = await postResult.body.getReader().read();
+
+      // decoding the Unit8Array() value to string
+      var decodedValue = new TextDecoder().decode(defaultEncodedValue.value);
+      if (postResult.status == 200) {
+        setFirstName("");
+        setLastName("");
+        setEmail("");
+        setCreditCard("");
+        setAge("");
+        setPassword("");
+        setConfirmPassword("");
+        setAddResult("User added.");
+      }
+      else if (postResult.status == 500) {
+        setConfirmPasswordErr("");
+        setCreditCardErr("");
+        setFirstNameErr("");
+        setAgeErr("");
+        setLastNameErr("");
+        setPasswordErr("");
+
+        var receivedError = JSON.parse(decodedValue);
+
+        var errorList = receivedError.map((element) => {
+          return element.description;
+        });
+        setServerErr(errorList);
+      }
+      else if (postResult.status == 400) {
+        setServerErr("");
+        var receivedError = JSON.parse(decodedValue).errors;
+        receivedError.ConfirmPassword ? setConfirmPasswordErr('Confirm Password is required and shall match with Password field.') : setConfirmPasswordErr("");
+        receivedError.CreditCard ? setCreditCardErr("Credit Card is required") : setCreditCardErr("");
+        receivedError.FirstName ? setFirstNameErr("First Name is required") : setFirstNameErr("");
+        receivedError.age ? setAgeErr("Age is required") : setAgeErr("");
+        receivedError.LastName ? setLastNameErr("Last name is required") : setLastNameErr("");
+        receivedError.Password ? setPasswordErr("Password is required for any profile update and shall match with ConfirmPassword field.") : setPasswordErr("");
+      }
+    }
+    else {
+      setServerErr("");
+      confirmPassword == "" ? setConfirmPasswordErr('Confirm Password is required and shall match with Password field.') : setConfirmPasswordErr("");
+      creditCard == "" ? setCreditCardErr("Credit Card is required") : setCreditCardErr("");
+      firstName == "" ? setFirstNameErr("First Name is required") : setFirstNameErr("");
+      age == 0 ? setAgeErr("Age is required") : setAgeErr("");
+      lastName == "" ? setLastNameErr("Last name is required") : setLastNameErr("");
+      password == "" ? setPasswordErr("Password is required for any profile update and shall match with ConfirmPassword field.") : setPasswordErr("");
     }
 
   }
+
 
   return (
     <div className="movie-login-background">
