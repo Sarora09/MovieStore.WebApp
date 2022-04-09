@@ -13,6 +13,7 @@ const UpdateMovie = () => {
     const [rentErr, setRentErr] = useState("");
     const [serverErr, setServerErr] = useState("");
     const [updateResult, setUpdateResult] = useState("");
+    const [internetErr, setInternetErr] = useState("");
     const params = useParams();
 
     useEffect(async () => {
@@ -42,6 +43,7 @@ const UpdateMovie = () => {
     // To clear the validation errors with state change once the user provided the value for the state
     useEffect(() => {
         setServerErr("");
+        setInternetErr("");
         if (name) {
             setMovieNameErr("");
         }
@@ -58,6 +60,8 @@ const UpdateMovie = () => {
 
     const submitMovie = async (e) => {
         e.preventDefault();
+        setInternetErr("");
+        setServerErr("");
         try {
             if (name && rating && genre && rentPrice) {
                 var id = params.id;
@@ -120,6 +124,11 @@ const UpdateMovie = () => {
                 {
                     serverErr && <div className="server-validation">
                         <h3>{serverErr}</h3>
+                    </div>
+                }
+                {
+                    internetErr && <div className="server-validation">
+                        <h3>{internetErr}</h3>
                     </div>
                 }
                 {updateResult && <p className="update-success">{updateResult}</p>}

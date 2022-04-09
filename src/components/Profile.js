@@ -23,6 +23,7 @@ const Profile = () => {
   const [passwordErr, setPasswordErr] = useState("");
   const [confirmPasswordErr, setConfirmPasswordErr] = useState("");
   const [serverErr, setServerErr] = useState("");
+  const [internetErr, setInternetErr] = useState("");
 
   // Profile loading if the user is an existing user
   useEffect(async () => {
@@ -43,65 +44,106 @@ const Profile = () => {
     }
   }, []);
 
+  // To clear the validation errors with state change once the user provided the value for the state
+  useEffect(() => {
+    setServerErr("");
+    setInternetErr("");
+    if (firstName) {
+      setFirstNameErr("");
+    }
+    if (lastName) {
+      setLastNameErr("");
+    }
+    if (email) {
+      setEmailErr("");
+    }
+    if (creditCard) {
+      setCreditCardErr("");
+    }
+    if (age) {
+      setAgeErr("");
+    }
+    if (password) {
+      setPasswordErr("");
+    }
+    if (confirmPassword) {
+      setConfirmPasswordErr("");
+    }
+  }, [firstName, lastName, email, creditCard, age, password, confirmPassword]);
+
   // The server validation errors are customized for better understanding
   const updateData = async (e) => {
     e.preventDefault();
-    if (firstName && lastName && email && creditCard && age && password && confirmPassword) {
-      let newUserId = localStorage.getItem('userId');
-      var result = await fetch(`https://movie-collection-api-app.azurewebsites.net/api/access/${newUserId}`,
-        {
-          method: 'put',
-          body: JSON.stringify({ firstName, lastName, email, creditCard, age, password, confirmPassword }),
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        });
+    setInternetErr("");
+    setServerErr("");
+    try {
+      if (firstName && lastName && email && creditCard && age && password && confirmPassword) {
+        let newUserId = localStorage.getItem('userId');
+        var result = await fetch(`https://movie-collection-api-app.azurewebsites.net/api/access/${newUserId}`,
+          {
+            method: 'put',
+            body: JSON.stringify({ firstName, lastName, email, creditCard, age, password, confirmPassword }),
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          });
 
-      // extracting the readable stream from the response and using the getReader() read property. It returns a Unit8Array() value
-      var defaultEncodedValue = await result.body.getReader().read();
+        // extracting the readable stream from the response and using the getReader() read property. It returns a Unit8Array() value
+        var defaultEncodedValue = await result.body.getReader().read();
 
-      // decoding the Unit8Array() value to string
-      var decodedValue = new TextDecoder().decode(defaultEncodedValue.value);
+        // decoding the Unit8Array() value to string
+        var decodedValue = new TextDecoder().decode(defaultEncodedValue.value);
 
-      if (result.status == 200) {
-        navigate('/moviedashboard', { state: { 'email': email } })
+        if (result.status == 200) {
+          navigate('/moviedashboard', { state: { 'email': email } })
+        }
+        else if (result.status == 500) {
+          setConfirmPasswordErr("");
+          setCreditCardErr("");
+          setFirstNameErr("");
+          setAgeErr("");
+          setLastNameErr("");
+          setPasswordErr("");
+
+          var receivedError = JSON.parse(decodedValue);
+
+          var errorList = receivedError.map((element) => {
+            return element.description;
+          });
+          setServerErr(errorList);
+        }
+        else if (result.status == 400) {
+          setServerErr("");
+          var receivedError = JSON.parse(decodedValue).errors;
+          receivedError.ConfirmPassword ? setConfirmPasswordErr('Confirm Password is required and shall match with Password field.') : setConfirmPasswordErr("");
+          receivedError.CreditCard ? setCreditCardErr("Credit Card is required") : setCreditCardErr("");
+          receivedError.FirstName ? setFirstNameErr("First Name is required") : setFirstNameErr("");
+          receivedError.age ? setAgeErr("Age is required") : setAgeErr("");
+          receivedError.LastName ? setLastNameErr("Last name is required") : setLastNameErr("");
+          receivedError.Password ? setPasswordErr("Password is required for any profile update and shall match with ConfirmPassword field.") : setPasswordErr("");
+
+        }
       }
-      else if (result.status == 500) {
-        setConfirmPasswordErr("");
-        setCreditCardErr("");
-        setFirstNameErr("");
-        setAgeErr("");
-        setLastNameErr("");
-        setPasswordErr("");
-
-        var receivedError = JSON.parse(decodedValue);
-
-        var errorList = receivedError.map((element) => {
-          return element.description;
-        });
-        setServerErr(errorList);
-      }
-      else if (result.status == 400) {
+      else {
         setServerErr("");
-        var receivedError = JSON.parse(decodedValue).errors;
-        receivedError.ConfirmPassword ? setConfirmPasswordErr('Confirm Password is required and shall match with Password field.') : setConfirmPasswordErr("");
-        receivedError.CreditCard ? setCreditCardErr("Credit Card is required") : setCreditCardErr("");
-        receivedError.FirstName ? setFirstNameErr("First Name is required") : setFirstNameErr("");
-        receivedError.age ? setAgeErr("Age is required") : setAgeErr("");
-        receivedError.LastName ? setLastNameErr("Last name is required") : setLastNameErr("");
-        receivedError.Password ? setPasswordErr("Password is required for any profile update and shall match with ConfirmPassword field.") : setPasswordErr("");
+        confirmPassword == "" ? setConfirmPasswordErr('Confirm Password is required and shall match with Password field.') : setConfirmPasswordErr("");
+        creditCard == "" ? setCreditCardErr("Credit Card is required") : setCreditCardErr("");
+        firstName == "" ? setFirstNameErr("First Name is required") : setFirstNameErr("");
+        age == 0 ? setAgeErr("Age is required") : setAgeErr("");
+        lastName == "" ? setLastNameErr("Last name is required") : setLastNameErr("");
+        password == "" ? setPasswordErr("Password is required for any profile update and shall match with ConfirmPassword field.") : setPasswordErr("");
+      }
 
+    }
+    catch (err) {
+      if (err == "TypeError: Failed to fetch") {
+        setInternetErr("Please ensure you have an internet connection.");
+      }
+      else {
+        setInternetErr(`Error: ${err}`);
       }
     }
-    else {
-      setServerErr("");
-      confirmPassword == "" ? setConfirmPasswordErr('Confirm Password is required and shall match with Password field.') : setConfirmPasswordErr("");
-      creditCard == "" ? setCreditCardErr("Credit Card is required") : setCreditCardErr("");
-      firstName == "" ? setFirstNameErr("First Name is required") : setFirstNameErr("");
-      age == 0 ? setAgeErr("Age is required") : setAgeErr("");
-      lastName == "" ? setLastNameErr("Last name is required") : setLastNameErr("");
-      password == "" ? setPasswordErr("Password is required for any profile update and shall match with ConfirmPassword field.") : setPasswordErr("");
-    }
+
   }
 
   return (
@@ -113,6 +155,11 @@ const Profile = () => {
             {serverErr.map((error, index) => {
               return <p key={index}>{index + 1}). {error}</p>
             })}
+          </div>
+        }
+        {
+          internetErr && <div className="server-validation">
+            <h3>{internetErr}</h3>
           </div>
         }
         <h1>My profile</h1>

@@ -15,9 +15,12 @@ const AddMovie = () => {
     const [rentErr, setRentErr] = useState("");
     const [serverErr, setServerErr] = useState("");
     const [addResult, setAddResult] = useState("");
+    const [internetErr, setInternetErr] = useState("");
 
     // To clear the validation errors with state change once the user provided the value for the state
     useEffect(() => {
+        setServerErr("");
+        setInternetErr("");
         if (name) {
             setMovieNameErr("");
         }
@@ -34,6 +37,8 @@ const AddMovie = () => {
 
     const submitMovie = async (e) => {
         e.preventDefault();
+        setInternetErr("");
+        setServerErr("");
         try {
             if (name && rating && genre && rentPrice) {
                 let token = localStorage.getItem('token');
@@ -90,13 +95,18 @@ const AddMovie = () => {
     return (
         <div className="movie-login-background">
             <div className="movie container">
-                <h1>Add Movie</h1>
                 {
                     serverErr && <div className="server-validation">
                         <h3>{serverErr}</h3>
                     </div>
                 }
+                {
+                    internetErr && <div className="server-validation">
+                        <h3>{internetErr}</h3>
+                    </div>
+                }
                 {addResult && <p className="update-success">{addResult}</p>}
+                <h1>Add Movie</h1>
                 <div className="movie-form">
                     <form onSubmit={submitMovie}>
                         <label>Movie Name</label>

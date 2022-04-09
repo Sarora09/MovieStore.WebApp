@@ -24,6 +24,7 @@ const UpdateUser = () => {
     const [passwordErr, setPasswordErr] = useState("");
     const [confirmPasswordErr, setConfirmPasswordErr] = useState("");
     const [serverErr, setServerErr] = useState("");
+    const [internetErr, setInternetErr] = useState("");
 
     useEffect(async () => {
         var userId = params.id;
@@ -45,6 +46,8 @@ const UpdateUser = () => {
 
     // To clear the validation errors with state change once the user provided the value for the state
     useEffect(() => {
+        setServerErr("");
+        setInternetErr("");
         if (firstName) {
             setFirstNameErr("");
         }
@@ -60,68 +63,86 @@ const UpdateUser = () => {
         if (age) {
             setAgeErr("");
         }
-    }, [firstName, lastName, email, creditCard, age]);
+        if (password) {
+            setPasswordErr("");
+        }
+        if (confirmPassword) {
+            setConfirmPasswordErr("");
+        }
+    }, [firstName, lastName, email, creditCard, age, password, confirmPassword]);
 
     const submitUser = async (e) => {
-
         e.preventDefault();
-        if (firstName && lastName && email && creditCard && age && password && confirmPassword) {
-            var id = params.id;
-            var token = localStorage.getItem('token');
-            var putResult = await fetch(`https://movie-collection-api-app.azurewebsites.net/api/access/${id}`, {
-                method: "put",
-                body: JSON.stringify({ firstName, lastName, email, creditCard, age, password, confirmPassword }),
-                headers: {
-                    authorization: `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                }
-            });
-
-            if (putResult.status == 200) {
-                setUpdateResult("User record updated");
-            }
-            else if (putResult.status == 500) {
-                // 500 when the server side code fails to work with the user response such as password requirement rules of .Net Core
-                setUpdateResult("");
-                setConfirmPasswordErr("");
-                setCreditCardErr("");
-                setFirstNameErr("");
-                setAgeErr("");
-                setLastNameErr("");
-                setPasswordErr("");
-
-                var receivedErrorResponse = await putResult.json();
-
-                var errorList = receivedErrorResponse.map((element) => {
-                    return element.description;
+        setInternetErr("");
+        setServerErr("");
+        try {
+            if (firstName && lastName && email && creditCard && age && password && confirmPassword) {
+                var id = params.id;
+                var token = localStorage.getItem('token');
+                var putResult = await fetch(`https://movie-collection-api-app.azurewebsites.net/api/access/${id}`, {
+                    method: "put",
+                    body: JSON.stringify({ firstName, lastName, email, creditCard, age, password, confirmPassword }),
+                    headers: {
+                        authorization: `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
                 });
-                setServerErr(errorList);
+
+                if (putResult.status == 200) {
+                    setUpdateResult("User record updated");
+                }
+                else if (putResult.status == 500) {
+                    // 500 when the server side code fails to work with the user response such as password requirement rules of .Net Core
+                    setUpdateResult("");
+                    setConfirmPasswordErr("");
+                    setCreditCardErr("");
+                    setFirstNameErr("");
+                    setAgeErr("");
+                    setLastNameErr("");
+                    setPasswordErr("");
+
+                    var receivedErrorResponse = await putResult.json();
+
+                    var errorList = receivedErrorResponse.map((element) => {
+                        return element.description;
+                    });
+                    setServerErr(errorList);
+                }
+                else if (putResult.status == 400) {
+                    // 400 error when the user response doesn't fails the validation set on the server side such as password and confirmPassword doesn't match on the server side validations
+                    setUpdateResult("");
+                    var receivedErrorResponse = await putResult.json();
+                    var receivedError = receivedErrorResponse.errors;
+                    setServerErr("");
+                    // var receivedError = JSON.parse(decodedValue).errors;
+                    receivedError.ConfirmPassword ? setConfirmPasswordErr('Confirm Password is required and shall match with Password field.') : setConfirmPasswordErr("");
+                    receivedError.CreditCard ? setCreditCardErr("Credit Card is required") : setCreditCardErr("");
+                    receivedError.FirstName ? setFirstNameErr("First Name is required") : setFirstNameErr("");
+                    receivedError.age ? setAgeErr("Age is required") : setAgeErr("");
+                    receivedError.LastName ? setLastNameErr("Last name is required") : setLastNameErr("");
+                    receivedError.Password ? setPasswordErr("Password is required for any profile update and shall match with ConfirmPassword field.") : setPasswordErr("");
+                }
             }
-            else if (putResult.status == 400) {
-                // 400 error when the user response doesn't fails the validation set on the server side such as password and confirmPassword doesn't match on the server side validations
+            else {
                 setUpdateResult("");
-                var receivedErrorResponse = await putResult.json();
-                var receivedError = receivedErrorResponse.errors;
                 setServerErr("");
-                // var receivedError = JSON.parse(decodedValue).errors;
-                receivedError.ConfirmPassword ? setConfirmPasswordErr('Confirm Password is required and shall match with Password field.') : setConfirmPasswordErr("");
-                receivedError.CreditCard ? setCreditCardErr("Credit Card is required") : setCreditCardErr("");
-                receivedError.FirstName ? setFirstNameErr("First Name is required") : setFirstNameErr("");
-                receivedError.age ? setAgeErr("Age is required") : setAgeErr("");
-                receivedError.LastName ? setLastNameErr("Last name is required") : setLastNameErr("");
-                receivedError.Password ? setPasswordErr("Password is required for any profile update and shall match with ConfirmPassword field.") : setPasswordErr("");
+                confirmPassword == "" ? setConfirmPasswordErr('Confirm Password is required and shall match with Password field.') : setConfirmPasswordErr("");
+                creditCard == "" ? setCreditCardErr("Credit Card is required") : setCreditCardErr("");
+                firstName == "" ? setFirstNameErr("First Name is required") : setFirstNameErr("");
+                age == 0 ? setAgeErr("Age is required") : setAgeErr("");
+                lastName == "" ? setLastNameErr("Last name is required") : setLastNameErr("");
+                password == "" ? setPasswordErr("Password is required for any profile update and shall match with ConfirmPassword field.") : setPasswordErr("");
             }
         }
-        else {
-            setUpdateResult("");
-            setServerErr("");
-            confirmPassword == "" ? setConfirmPasswordErr('Confirm Password is required and shall match with Password field.') : setConfirmPasswordErr("");
-            creditCard == "" ? setCreditCardErr("Credit Card is required") : setCreditCardErr("");
-            firstName == "" ? setFirstNameErr("First Name is required") : setFirstNameErr("");
-            age == 0 ? setAgeErr("Age is required") : setAgeErr("");
-            lastName == "" ? setLastNameErr("Last name is required") : setLastNameErr("");
-            password == "" ? setPasswordErr("Password is required for any profile update and shall match with ConfirmPassword field.") : setPasswordErr("");
+        catch (err) {
+            if (err == "TypeError: Failed to fetch") {
+                setInternetErr("Please ensure you have an internet connection.");
+            }
+            else {
+                setInternetErr(`Error: ${err}`);
+            }
         }
+
     }
 
     return (
@@ -133,6 +154,11 @@ const UpdateUser = () => {
                         {serverErr.map((error, index) => {
                             return <p key={index}>{index + 1}). {error}</p>
                         })}
+                    </div>
+                }
+                {
+                    internetErr && <div className="server-validation">
+                        <h3>{internetErr}</h3>
                     </div>
                 }
                 {updateResult && <p className="update-success">{updateResult}</p>}
