@@ -1,34 +1,89 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
 
 const AddMovie = () => {
 
+    // States for input field
     const [name, setMovieName] = useState("");
     const [rating, setRating] = useState("");
     const [genre, setGenre] = useState("");
     const [rentPrice, setRent] = useState("");
-    const [movieNameErr, setMovienameErr] = useState("");
+
+    // States for input field validations
+    const [movieNameErr, setMovieNameErr] = useState("");
     const [ratingErr, setRatingErr] = useState("");
     const [genreErr, setGenreErr] = useState("");
     const [rentErr, setRentErr] = useState("");
-    const Navigate = useNavigate();
+    const [serverErr, setServerErr] = useState("");
+    const [addResult, setAddResult] = useState("");
+
+    // To clear the validation errors with state change once the user provided the value for the state
+    useEffect(() => {
+        if (name) {
+            setMovieNameErr("");
+        }
+        if (rating) {
+            setRatingErr("");
+        }
+        if (genre) {
+            setGenreErr("");
+        }
+        if (rentPrice) {
+            setRentErr("");
+        }
+    }, [name, rating, genre, rentPrice]);
 
     const submitMovie = async (e) => {
         e.preventDefault();
-        let token = localStorage.getItem('token');
-        var postResult = await fetch(`https://movie-collection-api-app.azurewebsites.net/api/movies`,
-            {
-                method: 'post',
-                body: JSON.stringify({ name, rating, genre, rentPrice }),
-                headers: {
-                    authorization: `Bearer ${token}`,
-                    'Content-Type': 'application/json',
+        try {
+            if (name && rating && genre && rentPrice) {
+                let token = localStorage.getItem('token');
+                var postResult = await fetch(`https://movie-collection-api-app.azurewebsites.net/api/movies`,
+                    {
+                        method: 'post',
+                        body: JSON.stringify({ name, rating, genre, rentPrice }),
+                        headers: {
+                            authorization: `Bearer ${token}`,
+                            'Content-Type': 'application/json',
+                        }
+                    });
+
+                if (postResult.status == 201) {
+                    setAddResult("Movie added.");
+                    setMovieName("");
+                    setRating("");
+                    setGenre("");
+                    setRent("");
                 }
-            });
-        // console.log(postResult.status);
-        // console.log(await postResult.json());
-        if (postResult.status == 201) {
-            Navigate('/admindashboard/managemovies');
+                else if (postResult.status == 401) {
+                    setServerErr("Unauthorized access. Please ensure you have permissions to access movies.")
+                }
+                else if (postResult.status == 400) {
+                    var postResult = await postResult.json();
+                    var postResultError = postResult.errors;
+                    postResultError.Name ? setMovieNameErr("Movie Name is a required field") : setMovieNameErr("");
+                    postResultError.rating ? setRatingErr("Rating is a required field") : setRatingErr("");
+                    postResultError.Genre ? setGenreErr("Genre is a required field") : setGenreErr("");
+                    postResultError.rentPrice ? setRentErr("Rent is a required field") : setRentErr("");
+                }
+                else {
+                    setServerErr("Something is wrong. Please contact the server side administrator for details.");
+                }
+            }
+            else {
+                setAddResult("");
+                name == "" ? setMovieNameErr("Movie Name is a required field") : setMovieNameErr("");
+                rating == "" ? setRatingErr("Rating is a required field") : setRatingErr("");
+                genre == "" ? setGenreErr("Genre is a required field") : setGenreErr("");
+                rentPrice == "" ? setRentErr("Rent is a required field") : setRentErr("");
+            }
+        }
+        catch (err) {
+            if (err == "TypeError: Failed to fetch") {
+                setServerErr("Please ensure you have an internet connection.");
+            }
+            else {
+                setServerErr(`Error: ${err}`);
+            }
         }
     }
 
@@ -36,6 +91,12 @@ const AddMovie = () => {
         <div className="movie-login-background">
             <div className="movie container">
                 <h1>Add Movie</h1>
+                {
+                    serverErr && <div className="server-validation">
+                        <h3>{serverErr}</h3>
+                    </div>
+                }
+                {addResult && <p className="update-success">{addResult}</p>}
                 <div className="movie-form">
                     <form onSubmit={submitMovie}>
                         <label>Movie Name</label>
