@@ -28,9 +28,9 @@ const Nav = () => {
           </ul>
           :
           (checkUserId !== null ? <ul>
-            <li>
+            {/* <li>
               <Link to="/about">About</Link>
-            </li>
+            </li> */}
             <li>
               <Link to="/profile">Profile</Link>
             </li>
