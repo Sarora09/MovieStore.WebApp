@@ -534,6 +534,11 @@ table tbody tr:nth-of-type(2n) {
   margin: 1.5rem auto;
 }
 
+.loading-message {
+  color: grey;
+  margin-top: 0px;
+  margin-bottom: 25px;
+}
 
 /*Footer Ending*/
 

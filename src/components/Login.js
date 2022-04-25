@@ -7,6 +7,7 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [emailErr, setEmailErr] = useState("");
   const [passErr, setPassErr] = useState("");
+  const [loadingMessage, setLoadingMessage] = useState("");
   const navigate = useNavigate();
 
   // To avoid the user from coming to login button when the user is already logged in
@@ -29,6 +30,8 @@ const Login = () => {
     validation();
     if (email !== "" && password !== "") {
 
+      setLoadingMessage("Please wait. Loading...")
+
       // server returns response with code and body containing the login jwt string
       var result = await fetch("https://movie-collection-api-app.azurewebsites.net/api/access/login", {
         method: 'post',
@@ -40,6 +43,7 @@ const Login = () => {
 
       // displaying credential error for 401 server response code
       if (result.status == 401) {
+        setLoadingMessage("");
         setEmail("");
         setPassword("");
         setEmailErr("Incorrect Login Credentials. Please try again.");
@@ -80,7 +84,10 @@ const Login = () => {
     <div className="movie-login-background">
       <div className="movie-login container">
         <h1>Login</h1>
+
         <form onSubmit={submitData} className="movie-login-form">
+
+          {loadingMessage && <h2 className="loading-message">{loadingMessage}</h2>}
 
           <label>Username</label>
           <input type="text" placeholder="email" value={email} onChange={(e) => setEmail(e.target.value)} />
