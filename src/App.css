@@ -31,6 +31,7 @@ html {
   justify-content: space-between;
   padding: 10px 20px;
   color: lightgrey;
+  flex-wrap: wrap;
 }
 
 .container {
@@ -202,6 +203,8 @@ html {
   background-color: black;
 }
 
+/*Footer Ending*/
+
 /*Signup form*/
 .signup {
   display: flex;
@@ -252,7 +255,7 @@ html {
 }
 
 .signup-form button {
-  flex-basis: 76%;
+  flex-basis: 100%;
   padding: 10px;
   margin-left: 24%;
 }
@@ -268,13 +271,13 @@ html {
 }
 
 .profile {
-  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   margin-top: 50px;
   margin-bottom: 50px;
   justify-content: center;
+  width: 100%;
 }
 
 .profile h1 {
@@ -477,12 +480,10 @@ table tbody tr:nth-of-type(2n) {
 
 .admin-manage-movies {
   margin-top: 20px;
-  padding: 100px;
 }
 
 .admin-manage-users {
   margin-top: 20px;
-  padding: 100px;
 }
 
 .movie {
@@ -540,7 +541,104 @@ table tbody tr:nth-of-type(2n) {
   margin-bottom: 25px;
 }
 
-/*Footer Ending*/
+nav ul {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding-left: 0;
+}
+
+.hamburger {
+  border: 0;
+  font-size: 25px;
+  background-color: transparent;
+  cursor: pointer;
+  display: none;
+}
+
+@media (max-width: 992px) {
+  .profile-form-sub-container {
+    flex-direction: column;
+  }
+
+  .profile {
+    width: 50%;
+  }
+}
+
+@media (max-width: 768px) {
+
+  .profile-form-container {
+    width: 100%;
+  }
+
+  .movie-login-form {
+    width: 90%;
+  }
+
+  .movie-nav-links {
+    display: none;
+  }
+
+  .hamburger {
+    display: block;
+    color: lightgray;
+  }
+
+  .movie-nav-links.visible {
+    display: block;
+    width: 100%;
+  }
+
+  .movie-nav-links ul {
+    flex-direction: column;
+  }
+
+  .movie-nav-links ul li {
+    padding: 5px 0px;
+    margin-left: 0px;
+  }
+
+  .profile-form button {
+    width: 70%;
+  }
+
+  .manage-section {
+    flex-direction: column;
+  }
+
+  .admin-dashboard {
+    width: 80%;
+  }
+
+  .new-movie-button {
+    width: 70%;
+  }
+
+  .movie-table {
+    overflow-x: scroll;
+  }
+
+  .signup-form {
+    width: 80%;
+  }
+
+  .signup-form label {
+    flex-basis: 100%;
+    text-align: left;
+  }
+
+  .signup-form input {
+    flex-basis: 100%;
+  }
+
+  .signup-form button {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 16px;
+  }
+
+}
 
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
